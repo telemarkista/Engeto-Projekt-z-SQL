@@ -1,7 +1,7 @@
 # Projekt z SQL: Výzkumný Projekt
 
 Tento repozitář obsahuje soubory, které odpovídají na klíčové výzkumné otázky pro Engeto Datovou akademii. Odpovědi na jednotlivé otázky jsou formou komentářů v sql dotazech.
-
+Discord: telemarkista
 ## Výzkumné Otázky
 
 1. **Rostou v průběhu let mzdy ve všech odvětvích, nebo v některých klesají?**
