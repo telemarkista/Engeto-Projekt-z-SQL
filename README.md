@@ -31,10 +31,6 @@ Tento repozitář obsahuje soubory, které odpovídají na klíčové výzkumné
 
 ---
 
-Prozkoumejte data a kód v tomto repozitáři, abyste odpověděli na tyto otázky a získali přehled o ekonomických trendech v České republice.
-
----
-
 # SQL Project: Research Project
 
 This repository contains files that answer key research questions for the Engeto Data Academy. The project focuses on analyzing trends in wages, prices of essential goods, and their relationship to economic indicators in the Czech Republic.
@@ -66,6 +62,3 @@ This repository contains files that answer key research questions for the Engeto
 - **countries**: Information about countries worldwide, such as capital cities, currencies, national dishes, or average population heights.
 - **economies**: GDP, GINI index, tax burden, etc., for various countries and years.
 
----
-
-Feel free to explore the data and code in this repository to answer these questions and gain insights into the economic trends in the Czech Republic.
