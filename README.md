@@ -1,6 +1,6 @@
 # Projekt z SQL: Výzkumný Projekt
 
-Tento repozitář obsahuje soubory, které odpovídají na klíčové výzkumné otázky pro Engeto Datovou akademii. Projekt je zaměřen na analýzu trendů v mzdách, cenách základních potravin a jejich vztahu k ekonomickým ukazatelům v České republice.
+Tento repozitář obsahuje soubory, které odpovídají na klíčové výzkumné otázky pro Engeto Datovou akademii. Odpovědi na jednotlivé otázky jsou formou komentářů v sql dotazech.
 
 ## Výzkumné Otázky
 
@@ -33,7 +33,7 @@ Tento repozitář obsahuje soubory, které odpovídají na klíčové výzkumné
 
 # SQL Project: Research Project
 
-This repository contains files that answer key research questions for the Engeto Data Academy. The project focuses on analyzing trends in wages, prices of essential goods, and their relationship to economic indicators in the Czech Republic.
+This repository contains files that answer key research questions for the Engeto Data Academy. 
 
 ## Research Questions
 
