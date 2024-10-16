@@ -1,43 +1,40 @@
 -- Má výška HDP vliv na změny ve mzdách a cenách potravin? Neboli, pokud HDP vzroste výrazněji v jednom roce, projeví se to na cenách potravin či mzdách ve stejném nebo násdujícím roce výraznějším růstem?
--- Z dat nemůžeme jednoznačně říct, že změna HDP má vliv na změnu potravnin a mezd. Např. v roce 2007 můžeme vidět nárůst ve všech 3 kategoriríh, ale v roce 2015 už tento vzorec neplatí. 	
-WITH HDPzmena AS (
+ WITH GDPChange AS (
     SELECT 
-        e.`year` AS rok,
-        e.GDP AS gdp_hodnota,
-        LAG(e.GDP) OVER (ORDER BY e.`year`) AS predchozi_gdp,
-        ROUND(((e.GDP - LAG(e.GDP) OVER (ORDER BY e.`year`)) / LAG(e.GDP) OVER (ORDER BY e.`year`)) * 100, 2) AS gdp_zmena_procenta
+        e.`year` AS year,
+        e.GDP AS gdp_value,
+        LAG(e.GDP) OVER (ORDER BY e.`year`) AS previous_gdp,
+        ROUND(((e.GDP - LAG(e.GDP) OVER (ORDER BY e.`year`)) / LAG(e.GDP) OVER (ORDER BY e.`year`)) * 100, 2) AS gdp_change_percentage
     FROM 
         economies e
     WHERE 
         e.country = 'Czech Republic'
-), -- zde jsem získal informaci o HDP pro ČR
-PlatyAMzdy AS (
+), -- here I obtained the GDP information for the Czech Republic
+SalariesAndWages AS (
     SELECT 
-        trzpspf.rok,
-        round(AVG(trzpspf.prumerna_mzda)) AS prumerna_mzda,
-        round( AVG(trzpspf.prumerna_cena)) AS prumerna_cena,
-        LAG(AVG(trzpspf.prumerna_mzda)) OVER (ORDER BY trzpspf.rok) AS predochozi_prum_mzda,
-        LAG(AVG(trzpspf.prumerna_cena)) OVER (ORDER BY trzpspf.rok) AS predchozi_prum_cena,
-        ROUND(((AVG(trzpspf.prumerna_mzda) - LAG(AVG(trzpspf.prumerna_mzda)) OVER (ORDER BY trzpspf.rok)) / LAG(AVG(trzpspf.prumerna_mzda)) OVER (ORDER BY trzpspf.rok)) * 100, 2) AS mzda_zmena_procenta,
-        ROUND(((AVG(trzpspf.prumerna_cena) - LAG(AVG(trzpspf.prumerna_cena)) OVER (ORDER BY trzpspf.rok)) / LAG(AVG(trzpspf.prumerna_cena)) OVER (ORDER BY trzpspf.rok)) * 100, 2) AS cena_zmena_procenta
+        trzpspf.year,
+        ROUND(AVG(trzpspf.average_salary)) AS average_salary,
+        ROUND(AVG(trzpspf.average_food_price)) AS average_price,
+        LAG(AVG(trzpspf.average_salary)) OVER (ORDER BY trzpspf.year) AS previous_avg_salary,
+        LAG(AVG(trzpspf.average_food_price)) OVER (ORDER BY trzpspf.year) AS previous_avg_price,
+        ROUND(((AVG(trzpspf.average_salary) - LAG(AVG(trzpspf.average_salary)) OVER (ORDER BY trzpspf.year)) / LAG(AVG(trzpspf.average_salary)) OVER (ORDER BY trzpspf.year)) * 100, 2) AS salary_change_percentage,
+        ROUND(((AVG(trzpspf.average_food_price) - LAG(AVG(trzpspf.average_food_price)) OVER (ORDER BY trzpspf.year)) / LAG(AVG(trzpspf.average_food_price)) OVER (ORDER BY trzpspf.year)) * 100, 2) AS price_change_percentage
     FROM 
         t_robert_zunt_project_sql_primary_final trzpspf
     GROUP BY 
-        trzpspf.rok
+        trzpspf.year
 )
 SELECT 
-    p.rok,
-    h.gdp_hodnota,
-    p.prumerna_mzda,
-    p.prumerna_cena,
-    h.gdp_zmena_procenta,
-    p.mzda_zmena_procenta,
-    p.cena_zmena_procenta
+    p.year,
+    h.gdp_value,
+    p.average_salary,
+    p.average_price,
+    h.gdp_change_percentage,
+    p.salary_change_percentage,
+    p.price_change_percentage
 FROM 
-    HDPzmena h
+    GDPChange h
 JOIN 
-    PlatyAMzdy p ON h.rok = p.rok
+    SalariesAndWages p ON h.year = p.year
 ORDER BY 
-    p.rok;
-
-  
+    p.year;

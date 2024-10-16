@@ -2,54 +2,59 @@
 -- Pokud bude porovnávat trend mezd (růst/Klesání/beze změny  mezi průmeřnou roční mzdou v jednotlivých letech a pro každé odvětví, tak dojdeme k zjištění, že v některých odvětvích došlo i k meziročnímu poklesu.
 WITH TrendMezd AS (
     SELECT
-        rok,
-        odvetvi,
-        prumerna_mzda,
-        LAG(prumerna_mzda) OVER (PARTITION BY odvetvi ORDER BY rok) AS predchozi_mzda
+        year,
+        industry,
+        average_salary,
+        LAG(average_salary) OVER (PARTITION BY industry ORDER BY year) AS previous_wage
     FROM 
         t_robert_zunt_project_SQL_primary_final
 )
 SELECT 
-    rok,
-    odvetvi,
-    prumerna_mzda,
-    predchozi_mzda,
-    CASE 
-        WHEN prumerna_mzda > predchozi_mzda THEN 'Rust'
-        WHEN prumerna_mzda < predchozi_mzda THEN 'Klesani'
-        ELSE 'Beze změny'
+    year,
+    industry,
+    average_salary,
+    previous_wage,
+	CASE
+	    WHEN average_salary > previous_wage THEN 'Increase'
+	    WHEN average_salary < previous_wage THEN 'Decrease'
+	    ELSE 'No change'
     END AS trend
 FROM 
     TrendMezd
+WHERE 
+industry IS NOT null
 ORDER BY 
-    trend DESC;
+    trend ASC 
    
--- Pokud budeme porovnávat mzdy mezi prvním a posledním rokem ze sledovaného období, tak dojdeme k zjištění, že u všech odvětví došlo k nárůstu.
+-- When comparing wages between the first and last year of the observed period, we find that all industries experienced an increase.
 WITH TrendMezd AS (
     SELECT 
-        rok, 
-        odvetvi, 
-        prumerna_mzda,
-        FIRST_VALUE(prumerna_mzda) OVER (PARTITION BY odvetvi ORDER BY rok ASC) AS prvni_mzda,
-        LAST_VALUE(prumerna_mzda) OVER (PARTITION BY odvetvi ORDER BY rok ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS posledni_mzda,
-        FIRST_VALUE(rok) OVER (PARTITION BY odvetvi ORDER BY rok ASC) AS prvni_rok,
-        LAST_VALUE(rok) OVER (PARTITION BY odvetvi ORDER BY rok ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS posledni_rok
+        year, 
+        industry, 
+        average_salary,
+        FIRST_VALUE(average_salary) OVER (PARTITION BY industry ORDER BY year ASC) AS first_salary,
+        LAST_VALUE(average_salary) OVER (PARTITION BY industry ORDER BY year ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS last_salary,
+        FIRST_VALUE(year) OVER (PARTITION BY industry ORDER BY year ASC) AS first_year,
+        LAST_VALUE(year) OVER (PARTITION BY industry ORDER BY year ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS last_year
     FROM 
-        t_robert_zunt_project_sql_primary_final
+        t_robert_zunt_project_SQL_primary_final
 )
 SELECT 
-    odvetvi,
-    prvni_mzda,
-    posledni_mzda,
+    industry,
+    first_salary,
+    last_salary,
     CASE 
-        WHEN posledni_mzda > prvni_mzda THEN 'Rust'
-        WHEN posledni_mzda < prvni_mzda THEN 'Klesani'
-        ELSE 'Beze změny'
+        WHEN last_salary > first_salary THEN 'Increase'
+        WHEN last_salary < first_salary THEN 'Decrease'
+        ELSE 'No change'
     END AS trend
 FROM 
     TrendMezd
+WHERE 
+industry IS NOT null
 GROUP BY 
-    odvetvi, prvni_rok, posledni_rok, prvni_mzda, posledni_mzda
+    industry, first_year, last_year, first_salary, last_salary
 ORDER BY 
-    odvetvi;
+    industry;
+
 

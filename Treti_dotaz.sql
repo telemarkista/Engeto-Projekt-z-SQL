@@ -1,34 +1,67 @@
 -- Která kategorie potravin zdražuje nejpomaleji (je u ní nejnižší percentuální meziroční nárůst)?
--- Pro zjištění, která kategorie potravin zdražuje nejpomaleji jsme nejprce vypočítal meziroční rozdíl ceny pomocí LAG a dopočetl procenta. 
--- Pro odpovězení na otázku jsem výsledky seřadil podle procentuálního rozdílu. Na otázku nelze odpověď, že nějaká kategorie " meziročně zdražuje nejpomaleji", protože v datovém setu se nachází i kategorie, které měli pokles ceny. Datový set neobsahuje
--- informace o ceně Jakostního bílého vína pro celé období 2006-2018 ale pouze 2015-1018
-WITH Rocni_souhrn AS (
+
+WITH Annual_Summary AS (
     SELECT 
-        potraviny_kategorie,
-        rok,
-        prumerna_cena,
-        LAG(prumerna_cena) OVER (PARTITION BY potraviny_kategorie ORDER BY rok ASC) AS predchozi_cena
+        food_name,
+        year,
+        average_food_price,
+        LAG(average_food_price) OVER (PARTITION BY food_name ORDER BY year ASC) AS previous_price
     FROM 
         t_robert_zunt_project_sql_primary_final
 )
 SELECT 
-    potraviny_kategorie,
-    rok,
-    prumerna_cena,
-    predchozi_cena,
+    food_name,
+    year,
+    average_food_price,
+    previous_price,
     CASE 
-        WHEN predchozi_cena IS NOT NULL THEN ROUND(((prumerna_cena - predchozi_cena) / predchozi_cena) * 100, 2)
+        WHEN previous_price IS NOT NULL THEN ROUND(((average_food_price - previous_price) / previous_price) * 100, 2)
         ELSE NULL
-    END AS procentualni_rozdil
+    END AS percentage_difference
 FROM 
-    Rocni_souhrn
+    Annual_Summary
 WHERE 
-rok > 2006
+    year > 2006
 GROUP BY
-	potraviny_kategorie,
-	rok
+    food_name,
+    year
 ORDER BY 
-   	procentualni_rozdil DESC
-   	
-   	
+    percentage_difference ASC;
+
+   
+ -- part of script that can be used to see food thats price was descreasing 
+ WITH Annual_Summary AS (
+    SELECT 
+        food_name,
+        year,
+        average_food_price,
+        LAG(average_food_price) OVER (PARTITION BY food_name ORDER BY year ASC) AS previous_price
+    FROM 
+        t_robert_zunt_project_sql_primary_final
+)
+SELECT 
+    food_name,
+    year,
+    average_food_price,
+    previous_price,
+    CASE 
+        WHEN previous_price IS NOT NULL THEN ROUND(((average_food_price - previous_price) / previous_price) * 100, 2)
+        ELSE NULL
+    END AS percentage_difference
+FROM 
+    Annual_Summary
+WHERE 
+    year > 2006
+    AND CASE 
+        WHEN previous_price IS NOT NULL THEN ROUND(((average_food_price - previous_price) / previous_price) * 100, 2)
+        ELSE NULL
+    END < 0
+GROUP BY
+    food_name,
+    year,
+    average_food_price,
+    previous_price
+ORDER BY 
+    food_name DESC;
+
 
