@@ -1,24 +1,21 @@
 -- Existuje rok, ve kterém byl meziroční nárůst cen potravin výrazně vyšší než růst mezd (větší než 10 %)?
--- Vytvořil jsem přehled zobrazující procentuální rozdíl průměrné ceny všech potravin pro sledované roky. Z dat lze vidět, že v žádném sledovaném roce nedošlo k nárůstu přes 10%.
 
-WITH Rozdil_cen AS (
+WITH Price_Difference AS (
     SELECT 
-        rok,
-        AVG(prumerna_cena) AS souhrna_prumerna_cena,
-        LAG(AVG(prumerna_cena)) OVER (ORDER BY rok) AS predchozi_prumerna_cena
+        year,
+        AVG(average_food_price) AS overall_average_price,
+        LAG(AVG(average_food_price)) OVER (ORDER BY year) AS previous_average_price
     FROM 
         t_robert_zunt_project_sql_primary_final
     GROUP BY 
-        rok
+        year
 )
 SELECT 
-    rok,
-    ROUND(((souhrna_prumerna_cena - predchozi_prumerna_cena) / predchozi_prumerna_cena) * 100, 2) AS procentualni_rozdil
+    year,
+    ROUND(((overall_average_price - previous_average_price) / previous_average_price) * 100, 2) AS percentage_difference
 FROM 
-    Rozdil_cen
+    Price_Difference
 WHERE 
-    predchozi_prumerna_cena IS NOT NULL
+    previous_average_price IS NOT NULL
 ORDER BY 
-    rok;
-
-   
+    year;
