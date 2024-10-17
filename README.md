@@ -1,6 +1,8 @@
 # Projekt z SQL: Výzkumný Projekt
 
-Tento repozitář obsahuje soubory, které odpovídají na klíčové výzkumné otázky pro Engeto Datovou akademii. Odpovědi na jednotlivé otázky jsou formou komentářů v sql dotazech.
+Tento repozitář obsahuje soubory, které odpovídají na klíčové výzkumné otázky pro Engeto Datovou akademii. 
+Odpovědi na jednotlivé otázky jsou v [průvodní listině](https://github.com/telemarkista/Engeto-Projekt-z-SQL/blob/main/Pr%C5%AFvodn%C3%AD%20listina%20k.pdf).
+Pro vytvoření tabulek z kterých čerpají jednotlivé odpovědi na otázky slouží [SQLproject_primary_table](https://github.com/telemarkista/Engeto-Projekt-z-SQL/blob/main/SQLproject_primary_table.sql) a [SQLproject_secondary_table](https://github.com/telemarkista/Engeto-Projekt-z-SQL/blob/main/SQLproject_secondary_table.sql)
 
 Discord: telemarkista
 ## Výzkumné Otázky
