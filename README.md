@@ -4,7 +4,10 @@ Tento repozitář obsahuje soubory, které odpovídají na klíčové výzkumné
 Odpovědi na jednotlivé otázky jsou v [průvodní listině](https://github.com/telemarkista/Engeto-Projekt-z-SQL/blob/main/Pr%C5%AFvodn%C3%AD%20listina%20k.pdf).
 Pro vytvoření tabulek z kterých čerpají jednotlivé odpovědi na otázky slouží [SQLproject_primary_table](https://github.com/telemarkista/Engeto-Projekt-z-SQL/blob/main/SQLproject_primary_table.sql) a [SQLproject_secondary_table](https://github.com/telemarkista/Engeto-Projekt-z-SQL/blob/main/SQLproject_secondary_table.sql)
 
+[Hodnocení lektora](https://github.com/telemarkista/Engeto-Projekt-z-SQL/blob/main/Hodnoceni%20SQL.png)
+
 Discord: telemarkista
+
 ## Výzkumné Otázky
 
 1. **Rostou v průběhu let mzdy ve všech odvětvích, nebo v některých klesají?**
